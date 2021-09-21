@@ -1,4 +1,8 @@
 #!/bin/bash
+echo "in [out], stderr message." >&2
+jq -M -S . < /dev/stdin > /tmp/input.json
+cat /tmp/input.json >&2
+
 echo '{ "version": { "revision": "N/A", "message": "The out script version message says Hello World" }, "metadata": [{ "name": "message", "value": "The out script metadata message says Hello World." }] }'
 echo '{ "version": { "revision": "N/A", "message": "The out script version message says Hello World" }, "metadata": [{ "name": "message", "value": "The out script metadata message says Hello World." }] }' >&2
 

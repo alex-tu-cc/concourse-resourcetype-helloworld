@@ -10,10 +10,13 @@ resource_types:
     password: registry
     insecure_registries: [ "registry:5000" ]
 
-
 resources:
 - name: helloworld
   type: helloworld
+  source:
+    badge: true
+    link: true
+    webhook: https://chat.canonical.com/hooks/7mhchrpf1fnctnca3mk4wqss5r
 
 jobs:
 - name: hello-job
