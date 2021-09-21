@@ -5,7 +5,11 @@ resource_types:
     # set repo of your helloworld resource
     #repository: Your-Docker-Acct/Your-Docker-Repository
     ## or use my helloworld resource
-    repository: thehandsomezebra/concourse-resourcetype-helloworld
+    repository: registry:5000/test-resource
+    username: registry
+    password: registry
+    insecure_registries: [ "registry:5000" ]
+
 
 resources:
 - name: helloworld

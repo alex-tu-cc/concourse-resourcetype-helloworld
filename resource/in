@@ -1,4 +1,6 @@
 #!/bin/bash
 set -eu
 set -o pipefail
+echo "in [in], stderr message." >&2
+echo '{ "version": { "revision": "N/A", "message": "The in script version message says Hello World" }, "metadata": [{ "name": "message", "value": "The in script metadata message says Hello World." }] }' >&2
 echo '{ "version": { "revision": "N/A", "message": "The in script version message says Hello World" }, "metadata": [{ "name": "message", "value": "The in script metadata message says Hello World." }] }'
