@@ -1,5 +1,42 @@
 #!/bin/bash
 set -eu
 set -o pipefail
-echo '[{ "revision": "N/A",  "message": "The check script says Hello World!" }]'
+echo "in [check], stderr message." >&2
+#echo '[{ "revision": "N/A",  "message": "The check script says Hello World!" }]'
 echo '[{ "revision": "N/A",  "message": "The check script says Hello World!" }]' >&2
+
+jq -M -S . < /dev/stdin > /tmp/input.json
+cat /tmp/input.json >&2
+if [ "$(jq -r '.source | has("webhook")' < /tmp/input.json)" = 'true' ]; then
+    webhook="$(jq -r .source.webhook < /tmp/input.json)"
+    sha1="$(echo "$webhook" | sha1sum | awk '{print $1}')"
+    echo " webhook checked...ok" >&2
+else
+    echo "You need to provide the webhook."
+    exit 1
+fi
+
+if [ "$(jq -r '.params | has("link")' < /tmp/input.json)" = 'true' ]; then
+    link="$(jq -r .params.link < /tmp/input.json)"
+else
+    link="$(jq -r .source.link < /tmp/input.json)"
+fi
+    echo " link checked...ok" >&2
+
+if [ "$(jq -r '.params | has("badge")' < /tmp/input.json)" = 'true' ]; then
+    badge="$(jq -r .params.badge < /tmp/input.json)"
+else
+    badge="$(jq -r .source.badge < /tmp/input.json)"
+fi
+    echo " badge checked...ok" >&2
+
+# failed with error: run check: check: json: cannot unmarshal object into Go value of type []atc.Version
+# json='{"version":{"webhook":"'"$(dirname "$webhook")"'","sha1":"'"$sha1"'"}}'
+
+# failed with error: check did not return a version
+# json='[{"webhook":"'"$(dirname "$webhook")"'","sha1":"'"$sha1"'"}]'
+
+json='[{"version":{"webhook":"'"$(dirname "$webhook")"'","sha1":"'"$sha1"'"}}]'
+
+echo "END of [check]: $json" >&2
+echo $json
